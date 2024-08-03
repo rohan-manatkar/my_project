@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Scramble Game</title>
+    <link rel="stylesheet" href="game1.css">
+    <meta name="viewpoint" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <h2>Word Scramble</h2>
+        <div class="content">
+            <p class="word"></p>
+            <div class="details">
+                <p class="hint">Hint: <span></span></p>
+                <p class="Time">Time Left: <span><b>30</b>s</span></p>
+            </div>
+            <input type="text" placeholder="Enter a valid word">
+            <div class="buttons">
+                <button class="refresh-word">Refresh Word</button>
+                <button class="check-word">Check Word</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const words = [
+            {
+                word : "addition",
+                hint : "The process of adding numbers"
+            },
+            {
+                word : "meeting",
+                hint : "Event in which people came together"
+            },
+            {
+                word : "number",
+                hint : "Maths symbol used for counting"
+            },
+            {
+                word : "exchange",
+                hint : "The act of trading"
+            },
+            {
+                word : "canvas",
+                hint : "Piece of fabric for oil painting"
+            },
+            {
+                word : "garden",
+                hint : "Space for planting flowers and plants"
+            },
+            {
+                word : "pocket",
+                hint : "A bag for carrying small items"
+            },
+            {
+                word : "needle",
+                hint : "A thin and sharp metal pin"
+            },
+            {
+                word : "expert",
+                hint : "Person with extensive knowledge"
+            },
+            {
+                word : "Statement",
+                hint : "a declaration of something"
+            },
+            {
+                word : "second",
+                hint : "One-sixteenth of a minute"
+            },
+            {
+                word : "library",
+                hint : "Place containing collection of books"
+            },
+            {
+                word : "expansion",
+                hint : "The process of increase or grow"
+            },
+            {
+                word : "country",
+                hint : "A politically identified region"
+            },
+            {
+                word : "group",
+                hint : "A number of object or persons"
+            },
+            {
+                word : "taste",
+                hint : "Ability of tongue to detect flovour"
+            },
+            {
+                word : "store",
+                hint : "Large shop where goods are traded"
+            },
+            {
+                word : "field",
+                hint : "Area of land for farming activities"
+            }
+        ]
+
+        const wordText = document.querySelector(".word");
+        const hintText = document.querySelector(".hint span");
+        const timeText = document.querySelector(".Time b");
+        const inputField = document.querySelector("input");
+        const refreshBtn = document.querySelector(".refresh-word");
+        const checkBtn = document.querySelector(".check-word");
+        let correctWord, timer;
+
+        const initTimer = maxTime => {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                if(maxTime > 0){
+                    maxTime--;
+                    return timeText.innerText = maxTime;
+
+                }
+                clearInterval(timer);
+                alert(`Timer off! ${correctWord.toUpperCase()} was the correct word`);
+                initGame();
+            }, 1000);
+        }
+
+        const initGame = () => {
+            initTimer(30);
+            let randomObj = words[Math.floor(Math.random() * words.length)];
+            let wordArray = randomObj.word.split("");
+            for(let i = wordArray.length-1; i>0; i--){
+                let j = Math.floor(Math.random()*(i + 1));
+                [wordArray[i],wordArray[j]] = [wordArray[j], wordArray[i]];
+            }
+            wordText.innerText = wordArray.join("");
+            hintText.innerText = randomObj.hint;
+            correctWord = randomObj.word.toLowerCase();
+            inputField.value = "";
+            inputField.setAttribute("maxlength", correctWord.length);
+            
+        }
+        initGame();
+        const checkWord = () => {
+            let userWord = inputField.value.toLocaleLowerCase();
+            if(!userWord) return alert (`Please Enter a valid word`);
+            if(userWord !== correctWord) return alert (`Oops! ${userWord} is not a correct word`);
+            alert(`Congrats! ${userWord.toUpperCase()} is correct word`)
+            initGame();
+        }
+        refreshBtn.addEventListener("click", initGame);
+        checkBtn.addEventListener("click", checkWord);
+        
+    </script>
+</body>
+</html>
